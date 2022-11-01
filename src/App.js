@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import CurrencyInput from "./components/CurrencyInput";
 import DisplayCard from "./components/DisplayCard";
@@ -48,34 +48,28 @@ function App() {
   }, []);
 
   useEffect(() => {
-    handleFirstAmountChange(amount);
+    if (cryptoCurrencyData.rates[currency])
+      handleFirstAmountChange(amount, cryptoCurrencyData.rates[currency]);
   }, [cryptoCurrencyData.currency, cryptoCurrencyData.rates]);
 
-  function validateCurrencyRateExists(currency) {
-    return cryptoCurrencyData.rates[currency];
-  }
-
-  function handleFirstAmountChange(amount) {
-    if (!validateCurrencyRateExists(currency)) return;
-    setCryptoAmount(amount / cryptoCurrencyData.rates[currency]);
+  const handleFirstAmountChange = useCallback((amount, rate) => {
+    setCryptoAmount(amount / rate);
     setAmount(amount);
-  }
+  }, []);
 
-  function handleFirstCurrencyChange(currency) {
-    if (!validateCurrencyRateExists(currency)) return;
-    setCryptoAmount(amount / cryptoCurrencyData.rates[currency]);
+  const handleFirstCurrencyChange = useCallback(({ rate, currency }) => {
+    setCryptoAmount(amount / rate);
     setCurrency(currency);
-  }
+  }, []);
 
-  function handleSecoundAmountChange(amount) {
-    if (!validateCurrencyRateExists(currency)) return;
-    setAmount(amount * cryptoCurrencyData.rates[currency]);
+  const handleSecoundAmountChange = useCallback((amount, rate) => {
+    setAmount(amount * rate);
     setCryptoAmount(amount);
-  }
+  }, []);
 
-  function handleSecondCurrencyChange(currency) {
+  const handleSecondCurrencyChange = useCallback(({ currency }) => {
     getCurrencyExchangeRates(currency);
-  }
+  }, []);
 
   return (
     <div className="container rounded-lg p-5 ">
@@ -93,13 +87,16 @@ function App() {
                 value: currency.id,
                 label: currency.name,
               }))}
+              cryptoCurrencyData={cryptoCurrencyData}
               handleAmountChange={handleFirstAmountChange}
               handleCurrencyChange={handleFirstCurrencyChange}
             />
             <CurrencyInput
               amount={cryptoAmount}
+              activeCurrency={currency}
               currency={cryptoCurrencyData.currency}
               currencies={INITIAL_CRYPTO_CURRENCIES}
+              cryptoCurrencyData={cryptoCurrencyData}
               handleAmountChange={handleSecoundAmountChange}
               handleCurrencyChange={handleSecondCurrencyChange}
             />

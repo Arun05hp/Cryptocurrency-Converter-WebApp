@@ -2,8 +2,10 @@ import React, { useState } from "react";
 
 const CurrencyInput = ({
   amount,
+  activeCurrency,
   currency,
   currencies,
+  cryptoCurrencyData,
   handleAmountChange,
   handleCurrencyChange,
 }) => {
@@ -40,7 +42,10 @@ const CurrencyInput = ({
           type={"number"}
           value={amount}
           onChange={(event) => {
-            handleAmountChange(event.target.value.replace(/[^0-9_.]/g, ""));
+            handleAmountChange(
+              event.target.value.replace(/[^0-9_.]/g, ""),
+              cryptoCurrencyData.rates[activeCurrency ?? currency]
+            );
           }}
         />
         <div
@@ -83,7 +88,10 @@ const CurrencyInput = ({
                     className="list-item p-2 rounded-md"
                     key={currency.value}
                     onClick={() => {
-                      handleCurrencyChange(currency.value);
+                      handleCurrencyChange({
+                        rate: cryptoCurrencyData.rates[currency.value],
+                        currency: currency.value,
+                      });
                       handleCloseModal();
                     }}
                   >
