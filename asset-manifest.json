@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/cryptocurrency-converter-app/static/css/main.9834536e.css",
+    "main.js": "/cryptocurrency-converter-app/static/js/main.28230417.js",
+    "index.html": "/cryptocurrency-converter-app/index.html",
+    "main.9834536e.css.map": "/cryptocurrency-converter-app/static/css/main.9834536e.css.map",
+    "main.28230417.js.map": "/cryptocurrency-converter-app/static/js/main.28230417.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9834536e.css",
+    "static/js/main.28230417.js"
+  ]
+}
